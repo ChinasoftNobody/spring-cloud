@@ -1,0 +1,39 @@
+server:
+  port: 8888
+
+
+management:
+  context-path: /admin
+
+logging:
+  level:
+    com.netflix.discovery: 'OFF'
+    org.springframework.cloud: 'DEBUG'
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    statusPageUrlPath: /info
+    healthCheckUrlPath: /health
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/ChinasoftNobody/spring-cloud-config-repo
+          basedir: ./config
+---
+spring:
+  profiles: cloud
+  application:
+    name: configserver
+
+eureka:
+  password: password
+  instance:
+    hostname: ${vcap.application.uris[0]}
+    nonSecurePort: 80
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
